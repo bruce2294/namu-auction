@@ -137,8 +137,8 @@ export const RollingBanner: React.FC = () => {
         onMouseEnter={() => setIsPlaying(false)}
         onMouseLeave={() => setIsPlaying(true)}
       >
-        {/* 시원하고 웅장한 높이 (이미지 비율 및 여백 최적화) */}
-        <div className="relative w-full h-[300px] sm:h-[350px] md:h-[390px] overflow-hidden">
+        {/* 시원하고 웅장한 높이 (모바일 상하 분할 470px / 데스크톱 와이드 350~390px) */}
+        <div className="relative w-full h-[470px] sm:h-[350px] md:h-[390px] overflow-hidden">
           {/* 슬라이드 렌더링 */}
           {BANNER_SLIDES.map((item, index) => (
             <div
@@ -159,22 +159,22 @@ export const RollingBanner: React.FC = () => {
               <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/25 to-transparent sm:from-black/70 sm:via-black/35" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/15" />
 
-              {/* 🌟 2. 원본 비율이 100% 유지되는 대형 메인 아파트 이미지 (우측 70% 영역) */}
-              <div className="absolute inset-y-2 right-2 sm:right-4 md:right-6 w-full sm:w-[67%] md:w-[70%] flex items-center justify-center sm:justify-end p-2 sm:p-3 z-10 pointer-events-none">
-                <div className="relative max-h-full max-w-full rounded-2xl sm:rounded-3xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.45)] border border-white/35 backdrop-blur-md bg-white/5 flex items-center justify-center">
+              {/* 🌟 2. 원본 비율이 100% 유지되는 대형 메인 아파트 이미지 (모바일: 상단 220px 영역 / 데스크톱: 우측 70% 영역) */}
+              <div className="absolute top-2.5 left-2.5 right-2.5 h-[220px] sm:top-auto sm:left-auto sm:inset-y-2 sm:right-4 md:right-6 sm:w-[67%] md:w-[70%] sm:h-auto flex items-center justify-center sm:justify-end p-1 sm:p-3 z-10 pointer-events-none">
+                <div className="relative h-full max-h-[210px] sm:max-h-full max-w-full rounded-2xl sm:rounded-3xl overflow-hidden shadow-[0_15px_35px_rgba(0,0,0,0.4)] sm:shadow-[0_20px_50px_rgba(0,0,0,0.45)] border border-white/35 backdrop-blur-md bg-white/5 flex items-center justify-center">
                   <img
                     src={getAssetPath(item.imageUrl)}
                     alt={item.title}
-                    className="max-h-[260px] sm:max-h-[320px] md:max-h-[360px] w-auto max-w-full object-contain object-center rounded-2xl transform transition-transform duration-700 hover:scale-105"
+                    className="h-full max-h-[200px] sm:max-h-[320px] md:max-h-[360px] w-auto max-w-full object-contain object-center rounded-2xl transform transition-transform duration-700 hover:scale-105"
                   />
                   {/* 이미지 테두리 빛나는 유리 액자 림 라이트 */}
                   <div className="absolute inset-0 rounded-2xl ring-1 ring-inset ring-white/30 pointer-events-none" />
                 </div>
               </div>
 
-              {/* 🌟 3. 아이폰(iOS Liquid Glass) 맑은 투명 유리 + 물방울 효과 멘트 카드 (좌측 30% 영역) */}
-              <div className="absolute inset-y-0 left-0 max-w-7xl mx-auto px-4 sm:px-6 md:px-8 flex items-center z-20 pointer-events-none">
-                <div className="relative pointer-events-auto w-full sm:w-[320px] md:w-[340px] p-5 sm:p-6 md:p-7 rounded-3xl bg-white/[0.08] dark:bg-black/[0.18] backdrop-blur-2xl backdrop-saturate-[200%] border border-white/40 dark:border-white/30 shadow-[inset_0_1.5px_2px_0_rgba(255,255,255,0.9),_inset_0_-1px_1.5px_0_rgba(255,255,255,0.15),_0_20px_40px_-10px_rgba(0,0,0,0.5)] space-y-2.5 sm:space-y-3 animate-fadeIn overflow-hidden">
+              {/* 🌟 3. 아이폰(iOS Liquid Glass) 멘트 카드 (모바일: 하단 배치로 이미지와 분리 / 데스크톱: 좌측 30% 영역) */}
+              <div className="absolute bottom-2.5 left-2.5 right-2.5 sm:bottom-auto sm:inset-y-0 sm:left-0 sm:right-auto max-w-7xl mx-auto px-0 sm:px-6 md:px-8 flex items-end sm:items-center z-20 pointer-events-none">
+                <div className="relative pointer-events-auto w-full sm:w-[320px] md:w-[340px] p-4 sm:p-6 md:p-7 rounded-2xl sm:rounded-3xl bg-white/[0.08] dark:bg-black/[0.22] backdrop-blur-2xl backdrop-saturate-[200%] border border-white/40 dark:border-white/30 shadow-[inset_0_1.5px_2px_0_rgba(255,255,255,0.9),_inset_0_-1px_1.5px_0_rgba(255,255,255,0.15),_0_15px_35px_-10px_rgba(0,0,0,0.5)] space-y-2 sm:space-y-3 animate-fadeIn overflow-hidden">
                   {/* 애플 시그니처: 대각선 빛 반사 레이어 (Glossy Specular Sheen) */}
                   <div className="absolute inset-0 bg-gradient-to-br from-white/30 via-white/[0.04] to-transparent pointer-events-none" />
                   {/* 좌측 상단 은은한 프리즘 빛 퍼짐 */}
@@ -182,54 +182,54 @@ export const RollingBanner: React.FC = () => {
 
                   {/* 💧 유리 표면에 맺힌 영롱한 물방울 효과 (Liquid Dew Droplets) */}
                   {/* 물방울 1 (우측 상단 메인 방울) */}
-                  <div className="absolute top-3.5 right-4 w-4 h-4 rounded-full bg-white/25 backdrop-blur-sm border border-white/70 shadow-[inset_1.5px_1.5px_2px_rgba(255,255,255,0.95),_inset_-1px_-1px_2px_rgba(0,0,0,0.35),_1px_2px_4px_rgba(0,0,0,0.3)] pointer-events-none animate-pulse">
+                  <div className="absolute top-3 right-3.5 w-3.5 h-3.5 rounded-full bg-white/25 backdrop-blur-sm border border-white/70 shadow-[inset_1.5px_1.5px_2px_rgba(255,255,255,0.95),_inset_-1px_-1px_2px_rgba(0,0,0,0.35),_1px_2px_4px_rgba(0,0,0,0.3)] pointer-events-none animate-pulse">
                     <span className="absolute top-0.5 left-1 w-1 h-1 rounded-full bg-white opacity-95" />
                   </div>
                   {/* 물방울 2 (우측 상단 길쭉한 작은 방울) */}
-                  <div className="absolute top-6 right-9 w-2.5 h-3 rounded-full bg-white/20 backdrop-blur-sm border border-white/60 shadow-[inset_1px_1px_1.5px_rgba(255,255,255,0.9),_inset_-0.5px_-0.5px_1px_rgba(0,0,0,0.3),_1px_1.5px_3px_rgba(0,0,0,0.25)] pointer-events-none rotate-12">
+                  <div className="absolute top-5 right-8 w-2 h-2.5 rounded-full bg-white/20 backdrop-blur-sm border border-white/60 shadow-[inset_1px_1px_1.5px_rgba(255,255,255,0.9),_inset_-0.5px_-0.5px_1px_rgba(0,0,0,0.3),_1px_1.5px_3px_rgba(0,0,0,0.25)] pointer-events-none rotate-12">
                     <span className="absolute top-0.5 left-0.5 w-0.5 h-0.5 rounded-full bg-white opacity-90" />
                   </div>
                   {/* 물방울 3 (좌측 상단 모서리 이슬방울) */}
-                  <div className="absolute top-3 left-8 w-3 h-3 rounded-full bg-white/20 backdrop-blur-sm border border-white/60 shadow-[inset_1px_1px_2px_rgba(255,255,255,0.9),_inset_-1px_-1px_1.5px_rgba(0,0,0,0.3),_1px_2px_3px_rgba(0,0,0,0.25)] pointer-events-none">
+                  <div className="absolute top-2.5 left-7 w-2.5 h-2.5 rounded-full bg-white/20 backdrop-blur-sm border border-white/60 shadow-[inset_1px_1px_2px_rgba(255,255,255,0.9),_inset_-1px_-1px_1.5px_rgba(0,0,0,0.3),_1px_2px_3px_rgba(0,0,0,0.25)] pointer-events-none">
                     <span className="absolute top-0.5 left-0.5 w-0.5 h-0.5 rounded-full bg-white opacity-90" />
                   </div>
                   {/* 물방울 4 (우측 하단 미세 이슬) */}
-                  <div className="absolute bottom-4 right-6 w-2 h-2 rounded-full bg-white/30 border border-white/60 shadow-[inset_0.5px_0.5px_1px_rgba(255,255,255,0.9),_1px_1px_2px_rgba(0,0,0,0.2)] pointer-events-none" />
+                  <div className="absolute bottom-3 right-5 w-2 h-2 rounded-full bg-white/30 border border-white/60 shadow-[inset_0.5px_0.5px_1px_rgba(255,255,255,0.9),_1px_1px_2px_rgba(0,0,0,0.2)] pointer-events-none" />
 
                   {/* 상단 뱃지 라인 */}
                   <div className="relative z-10 flex flex-wrap items-center gap-1.5">
                     <span
-                      className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-black shadow-md ${item.tagBg}`}
+                      className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] sm:text-[11px] font-black shadow-md ${item.tagBg}`}
                     >
                       <Icon className="w-3 h-3" />
                       <span>{item.tag}</span>
                     </span>
                     {item.badge && (
-                      <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-white/30 text-white backdrop-blur-xl border border-white/50 shadow-[inset_0_1px_1px_rgba(255,255,255,0.7)]">
+                      <span className="px-2 py-0.5 rounded-full text-[9px] sm:text-[10px] font-bold bg-white/30 text-white backdrop-blur-xl border border-white/50 shadow-[inset_0_1px_1px_rgba(255,255,255,0.7)]">
                         {item.badge}
                       </span>
                     )}
                   </div>
 
                   {/* 메인 타이틀 & 자극 멘트 (투명 유리 위 또렷한 시인성) */}
-                  <div className="relative z-10 space-y-1">
+                  <div className="relative z-10 space-y-0.5 sm:space-y-1">
                     <h2 className="text-sm sm:text-base md:text-lg font-black text-white tracking-tight leading-snug drop-shadow-[0_2px_8px_rgba(0,0,0,0.85)]">
                       {item.title}
                     </h2>
                     <p className="text-xs sm:text-sm md:text-base font-black bg-gradient-to-r from-amber-300 via-yellow-200 to-amber-400 bg-clip-text text-transparent drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)] leading-snug">
                       👉 {item.highlight}
                     </p>
-                    <p className="text-[10px] sm:text-[11px] text-slate-100 font-medium line-clamp-2 leading-relaxed pt-0.5 drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)]">
+                    <p className="text-[10px] sm:text-[11px] text-slate-100 font-medium line-clamp-1 sm:line-clamp-2 leading-relaxed pt-0.5 drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)]">
                       {item.description}
                     </p>
                   </div>
 
                   {/* 행동 유도 CTA 버튼 */}
-                  <div className="relative z-10 pt-1">
+                  <div className="relative z-10 pt-0.5 sm:pt-1">
                     {item.id === 5 ? (
                       <button
                         onClick={openLoginModal}
-                        className="w-full inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-300 hover:to-orange-400 text-slate-950 text-xs font-black shadow-[inset_0_1.5px_1.5px_rgba(255,255,255,0.7),_0_10px_20px_-5px_rgba(245,158,11,0.5)] hover:scale-[1.02] transition-all cursor-pointer group"
+                        className="w-full inline-flex items-center justify-center gap-1.5 px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-300 hover:to-orange-400 text-slate-950 text-xs font-black shadow-[inset_0_1.5px_1.5px_rgba(255,255,255,0.7),_0_10px_20px_-5px_rgba(245,158,11,0.5)] hover:scale-[1.02] transition-all cursor-pointer group"
                       >
                         <span>{item.ctaText}</span>
                         <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
@@ -237,7 +237,7 @@ export const RollingBanner: React.FC = () => {
                     ) : (
                       <Link
                         href={item.linkHref}
-                        className="w-full inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl bg-gradient-to-r from-sky-500 to-teal-500 hover:from-sky-400 hover:to-teal-400 text-white text-xs font-black shadow-[inset_0_1.5px_1.5px_rgba(255,255,255,0.6),_0_10px_20px_-5px_rgba(14,165,233,0.5)] hover:scale-[1.02] transition-all cursor-pointer group"
+                        className="w-full inline-flex items-center justify-center gap-1.5 px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl bg-gradient-to-r from-sky-500 to-teal-500 hover:from-sky-400 hover:to-teal-400 text-white text-xs font-black shadow-[inset_0_1.5px_1.5px_rgba(255,255,255,0.6),_0_10px_20px_-5px_rgba(14,165,233,0.5)] hover:scale-[1.02] transition-all cursor-pointer group"
                       >
                         <span>{item.ctaText}</span>
                         <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
@@ -249,8 +249,8 @@ export const RollingBanner: React.FC = () => {
             </div>
           ))}
 
-        {/* 컨트롤러: 좌우 화살표 & 인디케이터 바 (Apple Frosted Glass) */}
-        <div className="absolute bottom-4 right-6 sm:right-12 z-30 flex items-center gap-2 bg-white/20 dark:bg-black/40 backdrop-blur-2xl px-3.5 py-1.5 rounded-full border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.7),_0_10px_20px_rgba(0,0,0,0.3)] text-white text-xs">
+        {/* 컨트롤러: 좌우 화살표 & 인디케이터 바 (모바일: 상단 우측 / 데스크톱: 우측 하단) */}
+        <div className="absolute top-4 right-4 sm:top-auto sm:bottom-4 sm:right-12 z-30 flex items-center gap-1.5 sm:gap-2 bg-black/40 sm:bg-white/20 sm:dark:bg-black/40 backdrop-blur-2xl px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-full border border-white/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.7),_0_10px_20px_rgba(0,0,0,0.3)] text-white text-xs">
           {/* 슬라이드 페이지 인디케이터 */}
           <span className="font-mono-nums font-bold text-xs tracking-wider">
             <strong className="text-cyan-400">{currentSlide + 1}</strong> / {BANNER_SLIDES.length}
