@@ -1,4 +1,4 @@
 :HL["/namu-auction/_next/static/chunks/233p45nuh4m5b.css","style"]
-:HL["/namu-auction/_next/static/chunks/1uxvhyewitmo-.css","style"]
+:HL["/namu-auction/_next/static/chunks/15p56zm9jwa4-.css","style"]
 :HL["/namu-auction/logo/ohsedol_logo-removebg-preview.png","image"]
-0:{"tree":{"name":"","param":null,"prefetchHints":4112,"slots":{"children":{"name":"/_not-found","param":null,"prefetchHints":4160,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":4256,"slots":null}}}}},"staleTime":300,"buildId":"cbsudJL4FQ0xY_ZnhCBtx"}
+0:{"tree":{"name":"","param":null,"prefetchHints":4112,"slots":{"children":{"name":"/_not-found","param":null,"prefetchHints":4160,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":4256,"slots":null}}}}},"staleTime":300,"buildId":"xqmv788MvITEcTZTKaEA8"}
