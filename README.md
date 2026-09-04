@@ -1,36 +1,158 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🌳 나무옥션 (Namu Auction)
+> **차세대 AI 브리핑 & 쇼핑몰 감성의 부동산 경·공매 정보 플랫폼**  
+> 운영 법인: **주식회사 나무 D&C** | 대표이사: **오세현**
 
-## Getting Started
+---
 
-First, run the development server:
+## 📌 1. 프로젝트 개요 (Overview)
 
+**나무옥션(Namu Auction)**은 복잡하고 어려운 기존 법원 경매·캠코 공매 정보를 **이커머스 쇼핑몰의 세련된 직관성과 AI 브리핑 기술**로 혁신한 차세대 프롭테크(PropTech) 웹 플랫폼입니다.
+
+수억 원의 실물 자산이 오가는 경·공매 시장에서, 사용자가 수많은 법원 문건을 일일이 읽지 않아도 **"AI 참모가 10초 만에 브리핑해 주는 경험"**과 쇼핑몰처럼 물건을 담아 필요 입찰보증금을 한눈에 계산하고 일괄 상담을 접수하는 **"경·공매 입찰 장바구니"** 환경을 제공합니다.
+
+---
+
+## ✨ 2. 핵심 기능 (Key Features)
+
+### 🌟 1. 쇼핑몰형 7:3 와이드 롤링 히어로 배너 (Rolling Banner)
+- **우측 70% 대형 갤러리 액자:** 원본 비율 무손실(`object-contain`) 이미지 렌더링 및 여백의 앰비언트 블러(`blur-3xl saturate-200`)로 압도적인 시각적 몰입감 제공.
+- **좌측 30% 애플 아이폰 스타일 리퀴드 글래스 (Liquid Glass):** 
+  - 초고도 투명도(`bg-white/[0.08]`) 백드롭과 정밀 인셋 글래스 베벨.
+  - 표면에 실제 맺힌 듯한 **3D 입체 물방울(Dew Droplets) 4구** 텍스처 탑재.
+  - 5대 강력한 감성 자극 경·공매 카피라이팅 및 자동 롤링 / 일시정지 제어.
+
+### 🛒 2. 쇼핑몰형 경·공매 입찰 장바구니 (Cart Drawer)
+- 관심 있는 경매·공매 물건을 **[🛒 담기]** 버튼 하나로 손쉽게 보관.
+- **3대 금융 지표 실시간 자동 집계:**
+  - 🔹 총 감정평가액 합계
+  - 🔹 총 최저매각가격 합계
+  - 🔹 **총 필요 입찰보증금 (10% 즉시 계산 강조)**
+- **[원클릭 일괄 상담 / 입찰의뢰 신청]:** 여러 건의 물건을 묶어 전문가에게 즉시 상담 및 대리입찰 신청 가능.
+
+### 🔐 3. 4대 소셜 간편 로그인 (Social OAuth)
+- 복잡한 회원가입 없이 1초 만에 인증 가능한 4대 플랫폼 지원:
+  - 🟢 **네이버 간편 로그인** (`#03C75A`)
+  - 🟡 **카카오 간편 로그인** (`#FEE500`)
+  - ⚪ **구글 간편 로그인** (Google Multi-color)
+  - ⚫ **애플 간편 로그인** (`#000000`)
+- 로그인 후 사용자 프로필 관리 및 전역 세션(`AuthContext`) 연동.
+
+### 🌓 4. 클린 라이트 모드 (Default) & 앰비언트 다크 모드
+- 눈이 편안하고 가독성이 뛰어난 **클린 프리미엄 라이트 모드를 기본(Default)**으로 채택.
+- 야간 투자자 및 데이터 분석가를 위한 **앰비언트 딥 다크 모드** 원클릭 토글 지원 (`localStorage` 설정 보존).
+
+### 🔍 5. 경·공매 통합 검색 & 상세 권리분석 모달 (`/search`)
+- 법원경매 및 온비드 공매 통합 필터링 (지역, 용도, 감정가/최저가, 유찰횟수, 매각기일).
+- 카드 그리드 뷰 및 리스트 뷰 전환.
+- 물건 상세 팝업(`DetailModal`): **AI 권리분석 신호등**, 국토부 실거래가 기반 시세분석 리포트, 가격 변동 추이 차트, 감정평가 요약 제공.
+
+### 🗺️ 6. 인터랙티브 지도 기반 탐색 (`/map`)
+- 지도 이동 및 줌 레벨에 따라 매물을 한눈에 파악하는 마커 클러스터링 및 간이 요약 카드.
+
+### 👥 7. 투자자 커뮤니티 (`/community`)
+- 전문가 칼럼, 실전 낙찰 성공 후기, 경공매 Q&A(답변 채택), 법원 판례 아카이브(판례 퀴즈) 제공.
+
+### 📊 8. 자산관리 & 맞춤형 AI 추천 대시보드 (`/mypage/assets`)
+- 내 보유 자산 및 가용 투자금 등록/관리.
+- 취득세 중과 및 대출(DSR/LTV) 규제를 실시간 반영한 **투자자 맞춤형 AI 물건 추천 엔진**.
+
+### 💎 9. 멤버십 안내 & 정기구독 결제 (`/membership`)
+- Free / Standard / Premium 멤버십 등급 비교 및 토스페이먼츠 정기 결제 플로우.
+
+---
+
+## 🛠️ 3. 기술 스택 (Tech Stack)
+
+| 구분 | 기술 스택 | 설명 |
+|---|---|---|
+| **Framework** | **Next.js 16.3.4 (App Router)** | Turbopack 기반 초고속 번들링 및 서버/클라이언트 컴포넌트 하이브리드 구성 |
+| **Language** | **TypeScript 5.x** | 정적 타입 안정성 보장 |
+| **Library** | **React 19** | 최신 React 아키텍처 |
+| **Styling** | **Tailwind CSS v4** | 유틸리티 퍼스트 기반 리퀴드 글래스 및 라이트/다크 테마 시스템 |
+| **Icons** | **Lucide React** | 일관되고 모던한 인터페이스 아이콘 세트 |
+| **State Management** | **React Context API** | `AuthContext` (4대 소셜 로그인), `CartContext` (입찰 장바구니) |
+| **Charts** | **Recharts** | 시세 변동 추이 및 자산 분석 시각화 |
+
+---
+
+## 🚀 4. 시작하기 (Getting Started)
+
+### 사전 요구사항 (Prerequisites)
+- [Node.js](https://nodejs.org/) v18.17.0 이상 (v20+ 권장)
+- npm, yarn, pnpm 중 하나의 패키지 매니저
+
+### 1) 의존성 패키지 설치
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2) 로컬 개발 서버 실행
+```bash
+npm run dev
+```
+브라우저에서 [http://localhost:3000](http://localhost:3000)으로 접속하면 프로토타입 웹 애플리케이션을 즉시 확인할 수 있습니다.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 3) 프로덕션 빌드 및 실행
+```bash
+# 프로덕션 빌드 (정적 라우트 컴파일 및 타입 검증)
+npm run build
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+# 프로덕션 서버 시작
+npm run start
+```
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## 📁 5. 프로젝트 디렉토리 구조 (Directory Structure)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```
+namu-auction/
+├── docs/                                  # 📚 프로젝트 상세 설계 문서
+│   ├── PRD_부동산경공매정보플랫폼.md          # 제품 요구사항 정의서 (v1.2)
+│   ├── IA_유저플로우_설계서.md               # 정보구조 및 핵심 유저 플로우 (v1.2)
+│   ├── UI_비주얼_아이덴티티_설계서.md         # 리퀴드 글래스 & 디자인 토큰 (v1.2)
+│   ├── DB_스키마_및_기술스택_설계서.md        # PostgreSQL/PostGIS 스키마 및 ERD (v1.2)
+│   ├── 데이터_일배치_연동_설계서.md           # 공공 API 일배치 연동 아키텍처 (v1.2)
+│   └── 경공매정보플랫폼_바이브코딩_프롬프트가이드.md # 개발 단계별 프롬프트 가이드
+│
+├── public/                                # 정적 애셋 (배너 이미지 1.jpg~5.jpg 등)
+├── src/
+│   ├── app/                               # Next.js App Router 라우트
+│   │   ├── layout.tsx                     # 전역 레이아웃 (GNB, CartDrawer, Footer, Provider)
+│   │   ├── page.tsx                       # 메인 홈 화면 (히어로 배너, 큐레이션, 통계)
+│   │   ├── search/page.tsx                # 경·공매 통합 검색 화면
+│   │   ├── map/page.tsx                   # 지도 기반 탐색 화면
+│   │   ├── community/page.tsx             # 투자자 커뮤니티 화면
+│   │   ├── membership/page.tsx            # 멤버십 요금제 안내 화면
+│   │   └── mypage/assets/page.tsx         # 자산관리 & AI 추천 대시보드
+│   │
+│   ├── components/                        # UI 컴포넌트 모음
+│   │   ├── auction/                       # 경매 물건 카드(AuctionCard), 상세 모달(DetailModal)
+│   │   ├── auth/                          # 4대 소셜 로그인 모달 (LoginModal)
+│   │   ├── cart/                          # 쇼핑몰형 입찰 장바구니 드로어 (CartDrawer)
+│   │   ├── common/                        # 헤더(Header), 푸터(Footer), 테마 토글
+│   │   └── home/                          # 7:3 롤링 배너(RollingBanner), 큐레이션 섹션
+│   │
+│   ├── context/                           # 전역 상태 컨텍스트
+│   │   ├── AuthContext.tsx                # 소셜 사용자 인증 상태
+│   │   └── CartContext.tsx                # 입찰 장바구니 및 금액 자동 집계 상태
+│   │
+│   ├── data/                              # 프로토타입 모의 데이터 (경매 물건, 커뮤니티 글 등)
+│   └── types/                             # TypeScript 타입 정의
+│
+├── next.config.ts                         # Next.js 설정 파일
+├── package.json                           # 패키지 매니페스트 및 스크립트
+└── tsconfig.json                          # TypeScript 컴파일러 설정
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## ⚖️ 6. 법적 고지 및 라이선스 (Legal Disclaimer)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- **운영 법인:** 주식회사 나무 D&C
+- **대표이사:** 오세현
+- **투자 면책 고지:**  
+  본 플랫폼에서 제공하는 모든 시세분석, AI 권리분석, 추천 정보 및 입찰보증금 계산 결과는 공공데이터 및 통계 알고리즘에 기초한 참고용 자료입니다. 법적 효력을 갖는 감정서 또는 보증서가 아니며, 최종 입찰 결정 및 법적 책임은 투자자 본인에게 있습니다.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+*Copyright © 2026 주식회사 나무 D&C. All rights reserved.*
