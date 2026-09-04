@@ -1,7 +1,10 @@
+'use client';
+
 import React from 'react';
 import { AuctionItem } from '../../types/auction';
-import { Sparkles, Calendar, MapPin, TrendingDown, ShieldCheck, ShoppingCart, Check } from 'lucide-react';
+import { Sparkles, Calendar, MapPin, TrendingDown, Eye, AlertTriangle, CheckCircle2, ShoppingCart, Check, ShieldCheck } from 'lucide-react';
 import { useCart } from '../../context/CartContext';
+import { getAssetPath } from '@/utils/path';
 
 interface AuctionCardProps {
   item: AuctionItem;
@@ -43,7 +46,7 @@ export const AuctionCard: React.FC<AuctionCardProps> = ({
       {/* 상단 썸네일 & 뱃지 오버레이 */}
       <div className="relative h-48 sm:h-52 w-full overflow-hidden bg-slate-100 dark:bg-slate-900">
         <img
-          src={item.thumbnailUrl}
+          src={getAssetPath(item.thumbnailUrl)}
           alt={item.title}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-95 group-hover:opacity-100"
           loading="lazy"

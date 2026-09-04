@@ -15,6 +15,7 @@ import {
   Gift
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import { getAssetPath } from '@/utils/path';
 
 interface BannerSlide {
   id: number;
@@ -148,7 +149,7 @@ export const RollingBanner: React.FC = () => {
             >
               {/* 🌟 1. 빈 영역을 멘트처럼 투명 유리(Frosted Liquid Glass)로 채우는 앰비언트 배경 */}
               <img
-                src={item.imageUrl}
+                src={getAssetPath(item.imageUrl)}
                 alt=""
                 aria-hidden="true"
                 className="absolute inset-0 w-full h-full object-cover blur-3xl opacity-50 scale-125 saturate-200"
@@ -162,7 +163,7 @@ export const RollingBanner: React.FC = () => {
               <div className="absolute inset-y-2 right-2 sm:right-4 md:right-6 w-full sm:w-[67%] md:w-[70%] flex items-center justify-center sm:justify-end p-2 sm:p-3 z-10 pointer-events-none">
                 <div className="relative max-h-full max-w-full rounded-2xl sm:rounded-3xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.45)] border border-white/35 backdrop-blur-md bg-white/5 flex items-center justify-center">
                   <img
-                    src={item.imageUrl}
+                    src={getAssetPath(item.imageUrl)}
                     alt={item.title}
                     className="max-h-[260px] sm:max-h-[320px] md:max-h-[360px] w-auto max-w-full object-contain object-center rounded-2xl transform transition-transform duration-700 hover:scale-105"
                   />

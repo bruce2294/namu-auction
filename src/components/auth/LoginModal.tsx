@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { X, Sparkles, ShieldCheck, Mail, Lock, ArrowRight } from 'lucide-react';
+import { getAssetPath } from '@/utils/path';
 
 export const LoginModal: React.FC = () => {
   const { isLoginModalOpen, closeLoginModal, login } = useAuth();
@@ -33,7 +34,7 @@ export const LoginModal: React.FC = () => {
         <div className="text-center space-y-2">
           <div className="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-white dark:bg-[#080B10] border border-slate-200 dark:border-[#1E2638] p-1.5 shadow-sm mx-auto">
             <img
-              src="/logo/ohsedol_logo-removebg-preview.png"
+              src={getAssetPath('/logo/ohsedol_logo-removebg-preview.png')}
               alt="나무옥션 로고"
               className="w-full h-full object-contain"
             />

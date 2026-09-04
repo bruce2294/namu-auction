@@ -1,5 +1,6 @@
 import React from 'react';
 import { Building2, ShieldCheck, Mail, Phone, MapPin } from 'lucide-react';
+import { getAssetPath } from '@/utils/path';
 
 export const Footer: React.FC = () => {
   return (
@@ -10,7 +11,7 @@ export const Footer: React.FC = () => {
           <div className="flex items-center gap-3">
             <div className="relative w-9 h-9 rounded-xl bg-white dark:bg-[#111622] border border-slate-200 dark:border-[#1E2638] flex items-center justify-center p-1 shadow-sm">
               <img
-                src="/logo/ohsedol_logo-removebg-preview.png"
+                src={getAssetPath('/logo/ohsedol_logo-removebg-preview.png')}
                 alt="나무옥션 로고"
                 className="w-full h-full object-contain"
               />

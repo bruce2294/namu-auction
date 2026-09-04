@@ -6,6 +6,7 @@ import { MobileNav } from '../../components/common/MobileNav';
 import { DetailModal } from '../../components/auction/DetailModal';
 import { MOCK_AUCTION_ITEMS } from '../../data/mock-auctions';
 import { AuctionItem } from '../../types/auction';
+import { getAssetPath } from '@/utils/path';
 import {
   MapPin,
   Layers,
@@ -104,7 +105,7 @@ export default function MapPage() {
                   }`}
                 >
                   <img
-                    src={item.thumbnailUrl}
+                    src={getAssetPath(item.thumbnailUrl)}
                     alt={item.title}
                     className="w-24 h-24 rounded-xl object-cover flex-shrink-0"
                   />
@@ -219,7 +220,7 @@ export default function MapPage() {
               <div className="rounded-2xl p-4 bg-white/95 dark:bg-[#0F1420]/95 border border-sky-300 dark:border-cyan-500/40 shadow-2xl backdrop-blur-md space-y-3">
                 <div className="flex gap-3">
                   <img
-                    src={selectedItem.thumbnailUrl}
+                    src={getAssetPath(selectedItem.thumbnailUrl)}
                     alt={selectedItem.title}
                     className="w-20 h-20 rounded-xl object-cover flex-shrink-0"
                   />

@@ -14,6 +14,7 @@ import {
   ExternalLink
 } from 'lucide-react';
 import Link from 'next/link';
+import { getAssetPath } from '@/utils/path';
 
 export const CartDrawer: React.FC = () => {
   const { cartItems, removeFromCart, clearCart, isCartOpen, closeCart } = useCart();
@@ -115,7 +116,7 @@ export const CartDrawer: React.FC = () => {
                   >
                     <div className="flex gap-3">
                       <img
-                        src={item.thumbnailUrl}
+                        src={getAssetPath(item.thumbnailUrl)}
                         alt={item.title}
                         className="w-20 h-20 rounded-xl object-cover flex-shrink-0 border border-slate-200 dark:border-slate-800"
                       />

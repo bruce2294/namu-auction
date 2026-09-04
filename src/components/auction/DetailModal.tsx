@@ -10,6 +10,7 @@ import {
   Check,
 } from 'lucide-react';
 import { useCart } from '../../context/CartContext';
+import { getAssetPath } from '@/utils/path';
 
 interface DetailModalProps {
   item: AuctionItem | null;
@@ -137,7 +138,7 @@ export const DetailModal: React.FC<DetailModalProps> = ({
           <div className="space-y-2">
             <div className="relative h-60 sm:h-72 w-full rounded-2xl overflow-hidden border border-slate-200 dark:border-[#1E2638] bg-slate-100 dark:bg-slate-900 shadow-sm">
               <img
-                src={item.images[activeImgIndex] || item.thumbnailUrl}
+                src={getAssetPath(item.images[activeImgIndex] || item.thumbnailUrl)}
                 alt={item.title}
                 className="w-full h-full object-cover transition-all duration-300"
               />
@@ -159,7 +160,7 @@ export const DetailModal: React.FC<DetailModalProps> = ({
                         : 'border-slate-200 dark:border-[#1E2638] opacity-70 hover:opacity-100'
                     }`}
                   >
-                    <img src={img} alt="단지 사진" className="w-full h-full object-cover" />
+                    <img src={getAssetPath(img)} alt="단지 사진" className="w-full h-full object-cover" />
                   </button>
                 ))}
               </div>

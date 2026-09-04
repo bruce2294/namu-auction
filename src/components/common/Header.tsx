@@ -1,10 +1,12 @@
 'use client';
 
 import React from 'react';
+import Link from 'next/link';
 import { Compass, Sparkles, Building2, BookOpen, Crown, User, Bell, Sun, Moon, LogOut, ShoppingCart } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import { useAuth } from '../../context/AuthContext';
 import { useCart } from '../../context/CartContext';
+import { getAssetPath } from '@/utils/path';
 
 export const Header: React.FC = () => {
   const { theme, toggleTheme } = useTheme();
@@ -16,10 +18,10 @@ export const Header: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
         {/* 브랜드 로고 */}
         <div className="flex items-center gap-6">
-          <a href="/" className="flex items-center gap-3 group">
+          <Link href="/" className="flex items-center gap-3 group">
             <div className="relative w-10 h-10 rounded-xl bg-white dark:bg-[#111622] border border-slate-200 dark:border-[#1E2638] flex items-center justify-center p-1 shadow-sm dark:shadow-md dark:shadow-cyan-500/10 group-hover:border-sky-500 dark:group-hover:border-cyan-500/40 transition-all">
               <img
-                src="/logo/ohsedol_logo-removebg-preview.png"
+                src={getAssetPath('/logo/ohsedol_logo-removebg-preview.png')}
                 alt="나무옥션 로고"
                 className="w-full h-full object-contain group-hover:scale-105 transition-transform"
               />
@@ -35,45 +37,45 @@ export const Header: React.FC = () => {
                 스마트 경·공매 & 자산 매칭
               </span>
             </div>
-          </a>
+          </Link>
 
           {/* 데스크톱 메뉴 */}
           <nav className="hidden md:flex items-center gap-1 text-sm font-medium">
-            <a
+            <Link
               href="/search"
               className="px-3.5 py-2 rounded-lg text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-[#111622] transition-colors flex items-center gap-1.5"
             >
               <Compass className="w-4 h-4 text-sky-600 dark:text-cyan-400" />
               경·공매 검색
-            </a>
-            <a
+            </Link>
+            <Link
               href="/map"
               className="px-3.5 py-2 rounded-lg text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-[#111622] transition-colors flex items-center gap-1.5"
             >
               <Building2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
               지도 탐색
-            </a>
-            <a
+            </Link>
+            <Link
               href="/community"
               className="px-3.5 py-2 rounded-lg text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-[#111622] transition-colors flex items-center gap-1.5"
             >
               <BookOpen className="w-4 h-4 text-amber-600 dark:text-amber-400" />
               커뮤니티·판례
-            </a>
-            <a
+            </Link>
+            <Link
               href="/mypage/assets"
               className="px-3.5 py-2 rounded-lg text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-[#111622] transition-colors flex items-center gap-1.5"
             >
               <Sparkles className="w-4 h-4 text-purple-600 dark:text-purple-400" />
               AI 자산관리
-            </a>
-            <a
+            </Link>
+            <Link
               href="/membership"
               className="px-3.5 py-2 rounded-lg text-amber-700 dark:text-amber-300 hover:text-amber-800 dark:hover:text-amber-200 hover:bg-amber-50 dark:hover:bg-amber-950/20 transition-colors flex items-center gap-1.5"
             >
               <Crown className="w-4 h-4 text-amber-500 dark:text-amber-400" />
               멤버십
-            </a>
+            </Link>
           </nav>
         </div>
 
