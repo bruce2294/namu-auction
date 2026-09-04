@@ -1,26 +1,131 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* 라이트 모드 (기본값) */
+  --bg-void: #F8FAFC;
+  --bg-subtle: #F1F5F9;
+  --surface-panel: rgba(255, 255, 255, 0.95);
+  --surface-panel-hover: #FFFFFF;
+  --surface-border: #E2E8F0;
+  --surface-card: #FFFFFF;
+  --accent-cyanic: #0284C7;
+  --accent-emerald: #059669;
+  --accent-amber: #D97706;
+  --accent-rose: #E11D48;
+  --text-primary: #0F172A;
+  --text-secondary: #475569;
+  --text-muted: #94A3B8;
+  --header-bg: rgba(255, 255, 255, 0.9);
+  --glass-border: rgba(226, 232, 240, 0.9);
+  --card-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.08);
+  --background: var(--bg-void);
+  --foreground: var(--text-primary);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+.dark {
+  /* 다크 모드 */
+  --bg-void: #080B10;
+  --bg-subtle: #0E131F;
+  --surface-panel: rgba(17, 22, 34, 0.75);
+  --surface-panel-hover: #171F30;
+  --surface-border: #1E2638;
+  --surface-card: #111622;
+  --accent-cyanic: #22D3EE;
+  --accent-emerald: #10B981;
+  --accent-amber: #F59E0B;
+  --accent-rose: #F43F5E;
+  --text-primary: #F1F5F9;
+  --text-secondary: #94A3B8;
+  --text-muted: #64748B;
+  --header-bg: rgba(8, 11, 16, 0.85);
+  --glass-border: rgba(30, 38, 56, 0.8);
+  --card-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  --background: var(--bg-void);
+  --foreground: var(--text-primary);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--bg-void);
+  color: var(--text-primary);
+  font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* 숫자 전용 tabular nums */
+.font-mono-nums {
+  font-family: ui-monospace, SFMono-Regular, "JetBrains Mono", Menlo, Monaco, Consolas, monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+/* 글래스모피즘 효과 */
+.glass-panel {
+  background: var(--surface-panel);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--surface-border);
+  box-shadow: var(--card-shadow);
+  transition: all 0.25s ease;
+}
+
+.glass-panel-hover:hover {
+  background: var(--surface-panel-hover);
+  border-color: var(--accent-cyanic);
+  box-shadow: 0 10px 25px -5px rgba(2, 132, 199, 0.15);
+}
+
+.dark .glass-panel-hover:hover {
+  box-shadow: 0 0 20px rgba(34, 211, 238, 0.15);
+}
+
+/* 절제된 AI 스캔라인 애니메이션 */
+@keyframes aiScan {
+  0% {
+    transform: translateX(-100%);
+  }
+  50% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+.ai-scanline {
+  position: relative;
+  overflow: hidden;
+}
+
+.ai-scanline::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 50%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #0284C7, #059669, transparent);
+  animation: aiScan 3.5s ease-in-out infinite;
+}
+
+.dark .ai-scanline::after {
+  background: linear-gradient(90deg, transparent, #22D3EE, #10B981, transparent);
+}
+
+/* 커스텀 스크롤바 */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-void);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--surface-border);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-cyanic);
 }

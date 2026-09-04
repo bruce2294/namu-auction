@@ -1,25 +1,30 @@
 # [Database & Architecture] 기술 스택 및 DB 스키마 설계서
-> **문서 버전:** v1.0  
-> **기준 문서:** [PRD_부동산경공매정보플랫폼.md](file:///c:/bruce/workspace/my_project/namu-auction/260904/namu-auction/PRD_%EB%B6%80%EB%8F%99%EC%82%B0%EA%B2%BD%EA%B3%B5%EB%A7%A4%EC%A0%95%EB%B3%B4%ED%94%8C%EB%9E%AB%ED%8F%BC.md)  
+> **문서 버전:** v1.2  
+> **기준 문서:** [PRD_부동산경공매정보플랫폼.md](file:///c:/bruce/workspace/my_project/namu-auction/260904/namu-auction/docs/PRD_%EB%B6%80%EB%8F%99%EC%82%B0%EA%B2%BD%EA%B3%B5%EB%A7%A4%EC%A0%95%EB%B3%B4%ED%94%8C%EB%9E%AB%ED%8F%BC.md)  
 > **데이터 수집 전략:** 일배치(Batch Synchronization) 기반 공공/외부 데이터 수집 및 정제  
-> **작성일자:** 2026-09-04  
+> **최신 갱신일자:** 2026-09-04  
+> **운영 법인:** 주식회사 나무 D&C (대표이사: 오세현)  
 
 ---
 
-## 1. 기술 스택 선정 및 사유 (3줄 요약)
+## 1. 기술 스택 선정 및 사유
 
-1. **Frontend (Next.js 14+ App Router, TypeScript, Tailwind CSS, shadcn/ui):**
-   - 별도 네이티브 앱 개발 비용을 없애고, SEO와 모바일 반응형 터치 UX를 동시에 만족하는 유일한 웹 클라이언트로 빠른 런칭과 유지보수 효율 극대화.
-2. **Backend & DB (NestJS, TypeScript, PostgreSQL 16 + PostGIS 확장, Prisma/TypeORM):**
-   - 대용량 물건 및 지도 좌표 반경 검색(ST_DWithin, ST_Within)에 특화된 PostGIS의 공간 인덱스 성능과, 엔터프라이즈급 모듈형 구조(NestJS)로 일배치 작업 및 외부 API 어댑터 분리에 최적.
-3. **Data Pipeline & Cron (NestJS ScheduleModule, BullMQ, Kakao Geocoding):**
-   - 온비드/국토부 등 외부 공공 API를 일배치(Daily Cron)로 비동기 큐에서 안정적으로 수집하고, raw 테이블과 정제 테이블을 분리하여 데이터 파이프라인의 내구성 확보.
+1. **Frontend (Next.js 16+ App Router, React 19, TypeScript 5, Tailwind CSS v4, Lucide React):**
+   - 최신 Next.js Turbopack 엔진을 활용한 초고속 빌드 및 모듈 번들링.
+   - 단일 반응형 웹 클라이언트로 데스크톱/모바일을 모두 수용하며, 기본 라이트 모드와 다크 모드 토글 지원.
+   - 전역 상태 관리: Context API (`AuthContext` - 4대 소셜 로그인, `CartContext` - 입찰 장바구니).
+   - 비주얼: 쇼핑몰형 7:3 와이드 롤링 배너, 아이폰 리퀴드 글래스(Liquid Glass) & 3D 입체 물방울 텍스처.
+2. **Backend & DB (NestJS, TypeScript, PostgreSQL 16 + PostGIS 확장, Prisma ORM):**
+   - 대용량 물건 및 지도 좌표 반경 검색(ST_DWithin, ST_Within)에 특화된 PostGIS의 공간 인덱스 성능.
+   - 모듈형 구조로 4대 소셜 OAuth 인증, 장바구니/일괄상담 API, 일배치 작업 및 외부 API 어댑터 분리에 최적.
+3. **Data Pipeline & Batch (NestJS ScheduleModule, BullMQ, Kakao Geocoding):**
+   - 온비드/국토부 등 외부 공공 API를 일배치(Daily Cron)로 비동기 큐에서 안정적으로 수집하고, raw 테이블과 정제 테이블을 분리하여 데이터 파이프라인 내구성 확보.
 
 ---
 
 ## 2. 데이터 수집 파이프라인 구조 (일배치 설계 원칙)
 
-사용자 요구사항인 **"일배치를 통한 데이터 수집"**을 안전하게 수용하기 위해 2계층 데이터 파이프라인을 구축합니다.
+사용자 요구사항인 **"일배치를 통한 데이터 수집"**을 안전하게 수용하기 위해 3계층 데이터 파이프라인을 구축합니다.
 
 ```
 [외부 데이터 소스]
@@ -53,7 +58,7 @@
 
 ## 3. 핵심 DB 스키마 명세 (PostgreSQL 16 + PostGIS)
 
-### 3.1 사용자 및 멤버십 관련 테이블
+### 3.1 사용자 및 인증 관련 테이블 (4대 소셜 OAuth 지원)
 ```sql
 -- 1. 회원 테이블
 CREATE TABLE users (
@@ -61,11 +66,13 @@ CREATE TABLE users (
     email VARCHAR(255) UNIQUE NOT NULL,
     password_hash VARCHAR(255), -- 소셜 가입자는 null 가능
     nickname VARCHAR(50) NOT NULL,
-    provider VARCHAR(20) DEFAULT 'local', -- local, kakao, google
-    provider_id VARCHAR(255),
+    avatar_url VARCHAR(500),
+    oauth_provider VARCHAR(20) DEFAULT 'LOCAL', -- LOCAL, NAVER, KAKAO, GOOGLE, APPLE
+    oauth_provider_id VARCHAR(255),
     role VARCHAR(20) DEFAULT 'USER', -- USER, CONSULTANT, ADMIN
     membership_tier VARCHAR(20) DEFAULT 'FREE', -- FREE, STANDARD, PREMIUM
     membership_expires_at TIMESTAMPTZ,
+    last_login_at TIMESTAMPTZ,
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
@@ -85,9 +92,40 @@ CREATE TABLE memberships (
 );
 ```
 
-### 3.2 일배치 Raw 수집 테이블 (데이터 파이프라인 안정성 확보)
+### 3.2 입찰 장바구니 및 일괄 상담/입찰의뢰 테이블 (쇼핑몰 감성 핵심)
 ```sql
--- 3. 외부 API 원본 수집 보관 테이블 (Raw Lake)
+-- 3. 입찰 장바구니 테이블 (물건 담기 및 실시간 보증금 합산)
+CREATE TABLE cart_items (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    item_type VARCHAR(20) NOT NULL, -- AUCTION, PUBLIC_AUCTION
+    item_id UUID NOT NULL,          -- auction_items.id 또는 public_auction_items.id
+    appraisal_price BIGINT NOT NULL, -- 담을 당시 감정가
+    minimum_price BIGINT NOT NULL,   -- 담을 당시 최저매각가
+    bid_deposit BIGINT NOT NULL,     -- 필요 입찰보증금 (통상 10%)
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(user_id, item_type, item_id)
+);
+
+-- 4. 원클릭 일괄 상담 / 입찰의뢰 신청 테이블
+CREATE TABLE consult_requests (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    applicant_name VARCHAR(50) NOT NULL,
+    applicant_phone VARCHAR(50) NOT NULL,
+    total_appraisal_price BIGINT NOT NULL, -- 의뢰 당시 총 감정가 합계
+    total_minimum_price BIGINT NOT NULL,   -- 의뢰 당시 총 최저가 합계
+    total_bid_deposit BIGINT NOT NULL,     -- 의뢰 당시 총 필요 보증금 (10%)
+    items_snapshot JSONB NOT NULL,         -- 의뢰 당시 담긴 물건 목록 스냅샷
+    status VARCHAR(20) DEFAULT 'RECEIVED', -- RECEIVED(접수완료), ASSIGNED(전문가배정), IN_CONSULTATION(상담중), COMPLETED(완료)
+    user_message TEXT,                     -- 신청자 추가 요청사항
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+### 3.3 일배치 Raw 수집 테이블 (데이터 파이프라인 안정성)
+```sql
+-- 5. 외부 API 원본 수집 보관 테이블 (Raw Lake)
 CREATE TABLE raw_external_payloads (
     id BIGSERIAL PRIMARY KEY,
     source_type VARCHAR(50) NOT NULL, -- ONBID, COURT_AUCTION, MOLIT_PRICE
@@ -101,9 +139,9 @@ CREATE TABLE raw_external_payloads (
 CREATE INDEX idx_raw_source_processed ON raw_external_payloads(source_type, is_processed);
 ```
 
-### 3.3 경매 및 공매 물건 테이블 (PostGIS 좌표 포함)
+### 3.4 경매 및 공매 물건 테이블 (PostGIS 좌표 포함)
 ```sql
--- 4. 행정구역 코드 (지역 필터 속도 최적화)
+-- 6. 행정구역 코드 (지역 필터 속도 최적화)
 CREATE TABLE regions (
     code VARCHAR(10) PRIMARY KEY, -- 법정동/행정동 코드 (예: 1144010100)
     sido VARCHAR(50) NOT NULL,     -- 서울특별시
@@ -112,7 +150,7 @@ CREATE TABLE regions (
     center_location GEOMETRY(Point, 4326) -- 중심 좌표
 );
 
--- 5. 법원경매 물건 정제 테이블
+-- 7. 법원경매 물건 정제 테이블
 CREATE TABLE auction_items (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     case_number VARCHAR(50) NOT NULL, -- 사건번호 (예: 2024타경104523)
@@ -136,7 +174,7 @@ CREATE TABLE auction_items (
     UNIQUE(case_number, item_number)  -- 사건번호 + 물건번호 유니크 (Upsert 키)
 );
 
--- 6. 온비드 공매 물건 정제 테이블
+-- 8. 온비드 공매 물건 정제 테이블
 CREATE TABLE public_auction_items (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     cltr_no VARCHAR(50) NOT NULL,     -- 온비드 물건관리번호
@@ -156,9 +194,9 @@ CREATE TABLE public_auction_items (
 );
 ```
 
-### 3.4 실거래가 및 시세분석 테이블
+### 3.5 실거래가 및 시세분석 테이블
 ```sql
--- 7. 국토부 실거래가 수집 테이블
+-- 9. 국토부 실거래가 수집 테이블
 CREATE TABLE molit_real_transactions (
     id BIGSERIAL PRIMARY KEY,
     deal_amount BIGINT NOT NULL,      -- 거래금액 (원)
@@ -175,7 +213,7 @@ CREATE TABLE molit_real_transactions (
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
 
--- 8. 물건별 AI 시세분석 캐시 테이블
+-- 10. 물건별 AI 시세분석 캐시 테이블
 CREATE TABLE price_analysis (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     auction_item_id UUID UNIQUE REFERENCES auction_items(id) ON DELETE CASCADE,
@@ -189,9 +227,9 @@ CREATE TABLE price_analysis (
 );
 ```
 
-### 3.5 자산관리 & AI 추천 & 정책 룰 엔진 테이블 (Phase 7.5 대응)
+### 3.6 자산관리 & AI 추천 & 정책 룰 엔진 테이블
 ```sql
--- 9. 부동산 정책 규칙 버전 관리 테이블 (세제, 대출 규제)
+-- 11. 부동산 정책 규칙 버전 관리 테이블 (세제, 대출 규제)
 CREATE TABLE policy_rules (
     id SERIAL PRIMARY KEY,
     policy_name VARCHAR(100) NOT NULL,     -- 예: '2024 다주택자 취득세 중과 규정'
@@ -204,7 +242,7 @@ CREATE TABLE policy_rules (
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
 
--- 10. 사용자 재정 프로필
+-- 12. 사용자 재정 프로필
 CREATE TABLE user_profile_finance (
     user_id UUID PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
     total_net_worth BIGINT DEFAULT 0,     -- 순자산
@@ -216,7 +254,7 @@ CREATE TABLE user_profile_finance (
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
 
--- 11. 사용자 보유 부동산
+-- 13. 사용자 보유 부동산
 CREATE TABLE user_assets (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
@@ -230,7 +268,7 @@ CREATE TABLE user_assets (
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
 
--- 12. AI 추천 로그 및 설명 근거 테이블
+-- 14. AI 추천 로그 및 설명 근거 테이블
 CREATE TABLE recommendation_logs (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
@@ -245,20 +283,9 @@ CREATE TABLE recommendation_logs (
 );
 ```
 
-### 3.6 관심물건 및 커뮤니티 테이블
+### 3.7 커뮤니티 테이블
 ```sql
--- 13. 관심물건 북마크
-CREATE TABLE bookmarks (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-    item_type VARCHAR(20) NOT NULL, -- AUCTION, PUBLIC_AUCTION
-    item_id UUID NOT NULL,
-    user_note TEXT,                 -- 사용자 개인 메모
-    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
-    UNIQUE(user_id, item_type, item_id)
-);
-
--- 14. 커뮤니티 게시글
+-- 15. 커뮤니티 게시글
 CREATE TABLE community_posts (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
@@ -274,7 +301,7 @@ CREATE TABLE community_posts (
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
 
--- 15. 댓글 및 Q&A 답변
+-- 16. 댓글 및 Q&A 답변
 CREATE TABLE comments (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     post_id UUID NOT NULL REFERENCES community_posts(id) ON DELETE CASCADE,
@@ -288,8 +315,6 @@ CREATE TABLE comments (
 ---
 
 ## 4. 인덱스 및 공간 쿼리(PostGIS GiST) 최적화 설계
-
-지도 화면(`/map`)에서 뷰포트 영역 내 물건을 빠르게 쿼리하기 위한 PostGIS 인덱스 설정입니다.
 
 ```sql
 -- 1. 지도 뷰포트 Bounding Box 검색을 위한 공간 인덱스 (GiST)
@@ -313,7 +338,8 @@ CREATE INDEX idx_community_search_gin ON community_posts USING gin(to_tsvector('
 ```mermaid
 erDiagram
     users ||--o{ memberships : "has"
-    users ||--o{ bookmarks : "creates"
+    users ||--o{ cart_items : "adds_to_cart"
+    users ||--o{ consult_requests : "requests_consultation"
     users ||--o{ community_posts : "writes"
     users ||--o{ comments : "leaves"
     users ||--o| user_profile_finance : "has"
@@ -321,6 +347,7 @@ erDiagram
     users ||--o{ recommendation_logs : "receives"
 
     auction_items ||--o| price_analysis : "analyzed_by"
+    auction_items ||--o{ cart_items : "referenced_in"
     auction_items ||--o{ recommendation_logs : "targeted_in"
     
     community_posts ||--o{ comments : "contains"
@@ -330,8 +357,26 @@ erDiagram
         UUID id PK
         string email
         string nickname
+        string oauth_provider
         string membership_tier
-        timestamp membership_expires_at
+    }
+
+    cart_items {
+        UUID id PK
+        UUID user_id FK
+        UUID item_id FK
+        bigint appraisal_price
+        bigint minimum_price
+        bigint bid_deposit
+    }
+
+    consult_requests {
+        UUID id PK
+        UUID user_id FK
+        string applicant_name
+        string applicant_phone
+        bigint total_bid_deposit
+        string status
     }
 
     auction_items {
@@ -341,6 +386,7 @@ erDiagram
         string address_jibun
         bigint appraisal_price
         bigint minimum_price
+        bigint bid_deposit
         int fail_count
         date auction_date
         geometry location
@@ -361,22 +407,8 @@ erDiagram
         jsonb rule_payload
         date effective_start_date
     }
-
-    user_profile_finance {
-        UUID user_id PK, FK
-        bigint available_cash
-        int owned_house_count
-        bigint existing_loan_amount
-    }
-
-    recommendation_logs {
-        UUID id PK
-        UUID user_id FK
-        UUID auction_item_id FK
-        numeric score
-        text explanation_text
-    }
 ```
 
 ---
 *본 스키마 문서는 일배치 동기화 모듈(Phase 4)과 NestJS 엔티티/Prisma 마이그레이션(Phase 5)의 기준 스키마로 사용됩니다.*
+
